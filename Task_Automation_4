@@ -1,0 +1,114 @@
+import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import sun.awt.windows.ThemeReader;
+import sun.jvm.hotspot.debugger.cdbg.DebugEvent;
+import sun.util.resources.cldr.mas.CalendarData_mas_KE;
+
+import java.lang.String;
+import java.awt.event.InputEvent;
+import java.time.Duration;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+
+public class Task_4 {
+
+        public static void main(String[] args) throws InterruptedException {
+            System.setProperty("webdriver.chrome.driver", "/Users/zukhraabdukolikova/Desktop/Browser Drivers/chromedriver");
+            ChromeOptions options = new ChromeOptions();
+            options.setExperimentalOption("useAutomationExtension", false);
+            options.setExperimentalOption("excludeSwitches", Collections.singletonList("enable-automation"));
+            WebDriver driver = new ChromeDriver(options);
+
+            driver.manage().window().maximize();
+            driver.get("https://www.carmax.com/");
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+            driver.manage().deleteAllCookies();
+
+            JavascriptExecutor b=(JavascriptExecutor)driver;
+            b.executeScript("window.scrollTo(500,3000)");
+
+
+           //Click VIN
+            WebElement word = driver.findElement(By.xpath("//button[@id='button-VIN']"));
+            word.click();
+            Thread.sleep(1000);
+
+
+
+            // Enter Vin number and zipcode
+            driver.findElement(By.xpath("//input[@id='ico-form-vin' or @id='ico-form-zipcode']")).sendKeys("4T1BE46K67U162207", Keys.TAB, "22182", Keys.ENTER);
+
+
+
+           // Click get started button
+            WebElement a= driver.findElement(By.xpath("//button[@class='submit-button kmx-button--primary kmx-button']"));
+             boolean d= a.isEnabled();
+               if (d){
+                 System.out.println("Get started button is enable");
+               } else{
+                   System.out.println("Get started button is disable");
+                      }
+            System.out.println("*************************");
+
+
+            
+
+          // Click Style (LE 4D Sedan 2.4L)
+         WebElement s= driver.findElement(By.xpath("//div[@class='mdc-radio__outer-circle']/following::div[@class='mdc-radio__inner-circle']/following::label[text()=\"LE 4D Sedan 2.4L\"]"));
+         if (!s.isSelected()){
+             s.click();
+        }else {
+             System.out.println("button was not founded");
+         }Thread.sleep(1000);
+
+
+
+          //Click drive button and choose 4D/W
+           Select drive= new Select(driver.findElement(By.cssSelector("select[name='drive']")));
+            drive.selectByIndex(2);
+            Thread.sleep(1000);
+
+
+
+
+           // Click feature button and choose automatic
+            Select trasmission= new Select(driver.findElement(By.xpath("//select[@id='select-ico-features-transmission']")));
+            trasmission.selectByVisibleText("Automatic");
+            Thread.sleep(2000);
+
+
+
+            // ?????
+            List<WebElement> allItems= driver.findElements(By.xpath("//input[@aria-checked='false']/ancestor::div[@class='kmx-checkbox']"));
+            for (WebElement oneItem: allItems) {
+                if (!oneItem.isSelected()) {
+                    oneItem.click();
+                }
+            }
+
+
+
+            WebElement search = driver.findElement(By.xpath("//button[@id='ico-step-Mileage_and_Condition-btn']"));
+            Actions actions = new Actions(driver);
+            actions = actions.keyDown(Keys.CONTROL);
+            actions = actions.click(search);
+            actions= actions.sendKeys("60000");
+            actions = actions.keyUp(Keys.CONTROL);
+            actions.perform();
+
+
+
+
+//            driver.close();
+
+
+
+
+        }
+}
